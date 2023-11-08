@@ -5,23 +5,28 @@ const resetButtonEl = document.getElementById("reset");
 
 let startTime = 0;
 let elapsedTime = 0;
-//calculate intervals
 let timerInterval;
 
 function startTimer() {
   startTime = Date.now() - elapsedTime;
-
+  //calculate intervals
   timerInterval = setInterval(() => {
     elapsedTime = Date.now() - startTime;
     timerEl.textContent = formatTime(elapsedTime);
   }, 10);
+
+  startButtonEl.disabled = true;
+  stopButtonEl.disabled = false;
 }
 
 function formatTime(elapsedTime) {
   //to show the miliseconds
   const milliseconds = Math.floor((elapsedTime % 1000) / 10);
+  //to show the seconds
   const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
+  //to show the minutes
   const minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
+  //to show the hours
   const hours = Math.floor(elapsedTime / (1000 * 60 * 60));
 
   return (
@@ -35,10 +40,17 @@ function formatTime(elapsedTime) {
   );
 }
 function stopTimer() {
-  console.log("stop");
+  clearInterval(timerInterval);
+  startButtonEl.disabled = false;
+  stopButtonEl.disabled = true;
 }
+
 function resetTimer() {
-  stop("");
+  clearInterval(timerInterval);
+  elapsedTime = 0;
+  timerEl.textContent = "00:00:00";
+  startButtonEl.disabled = false;
+  stopButtonEl.disabled = true;
 }
 
 startButtonEl.addEventListener("click", startTimer);
